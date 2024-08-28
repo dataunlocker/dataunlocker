@@ -1,0 +1,68 @@
+{
+  "name": "dataunlocker",
+  "version": "1.0.0",
+  "description": "DataUnlocker's command line interface utilities",
+  "type": "module",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "files": [
+    "dist",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
+  ],
+  "bin": {
+    "dataunlocker": "./dist/bin/index.js"
+  },
+  "scripts": {
+    "test": "mocha ./dist/**/*.test.js --timeout 30000",
+    "build": "tsc && tsc-alias"
+  },
+  "keywords": [
+    "dataunlocker",
+    "defender",
+    "dataunlocker defender",
+    "ad blocker",
+    "ad",
+    "blocker",
+    "blockers",
+    "adblocker",
+    "data",
+    "unlocker",
+    "security",
+    "integrity",
+    "web",
+    "app",
+    "protection",
+    "antiadblock",
+    "anti adblock",
+    "privacy",
+    "web app protection",
+    "tracking",
+    "analytics",
+    "tag manager",
+    "marketing",
+    "obfuscation"
+  ],
+  "author": "DataUnlocker (https://dataunlocker.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dataunlocker/dataunlocker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dataunlocker/dataunlocker/issues"
+  },
+  "homepage": "https://github.com/dataunlocker/dataunlocker#readme",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.3.19",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^20.10.6",
+    "chai": "^5.1.1",
+    "execa": "^9.3.1",
+    "mocha": "^10.7.3",
+    "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "tsc-alias": "^1.8.10",
+    "typescript": "^5.4.5"
+  }
+}
