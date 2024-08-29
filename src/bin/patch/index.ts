@@ -1,3 +1,4 @@
+import { getEnv } from '@/utils';
 import { createHash } from 'crypto';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, resolve } from 'path';
@@ -29,11 +30,8 @@ export default async function patch(args: Args) {
   }
 
   const js = await readFile(file);
-  const id =
-    args.id ||
-    process.env.DATAUNLOCKER_ID ||
-    process.env.npm_config_dataunlocker_id;
-  const env = (process.env.DATAUNLOCKER_ENV || '').toLowerCase();
+  const id = args.id || getEnv('DATAUNLOCKER_ID');
+  const env = getEnv('DATAUNLOCKER_ENV').toLowerCase();
 
   if (!file.endsWith('.js')) {
     return warnAndExit(
