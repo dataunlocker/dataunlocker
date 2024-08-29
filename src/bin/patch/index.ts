@@ -62,7 +62,7 @@ export default async function patch(args: Args) {
   if (fileBackup) {
     console.info(`Backing up ${file} -> ${fileBackup}...`);
 
-    if (await isFileExists(file)) {
+    if (await isFileExists(fileBackup)) {
       console.info(`Overwriting existing backup file ${fileBackup}...`);
     }
 

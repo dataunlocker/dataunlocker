@@ -1,6 +1,6 @@
 {
   "name": "dataunlocker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "DataUnlocker's command line interface utilities",
   "type": "module",
   "main": "dist/lib/index.js",
@@ -15,6 +15,7 @@
   },
   "scripts": {
     "test": "mocha ./dist/**/*.test.js --timeout 30000",
+    "test:local": "npm run build && npm run test",
     "build": "tsc && tsc-alias"
   },
   "keywords": [
