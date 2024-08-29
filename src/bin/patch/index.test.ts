@@ -67,6 +67,7 @@ describe('dataunlocker patch', () => {
   });
 
   it('backups a file to a selected location if given', async () => {
+    await new Promise((r) => setTimeout(r, 10000)); // API rate limit cut
     await $({
       stdio: ['inherit', 'inherit', 'inherit'],
     })`npx -y dataunlocker patch local/test.js --backup ${backupFile2}`;

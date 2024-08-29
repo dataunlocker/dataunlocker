@@ -59,20 +59,6 @@ export default async function patch(args: Args) {
       ? ''
       : `${file}.${createHash('sha256').update(js).digest('hex').slice(0, 7)}.backup`;
 
-  if (fileBackup) {
-    console.info(`Backing up ${file} -> ${fileBackup}...`);
-
-    if (await isFileExists(fileBackup)) {
-      console.info(`Overwriting existing backup file ${fileBackup}...`);
-    }
-
-    await mkdir(dirname(fileBackup), { recursive: true });
-
-    await writeFile(fileBackup, js);
-
-    console.info(`✔ File backed up, ${file} -> ${fileBackup}`);
-  }
-
   console.log(`Patching ${file}, please wait...`);
 
   if (args.endpoint) {
@@ -108,6 +94,20 @@ export default async function patch(args: Args) {
       `POST ${url} failed, status ${result.status} ${result.statusText}\n\n${text}`
     );
     process.exit(1004);
+  }
+
+  if (fileBackup) {
+    console.info(`Backing up ${file} -> ${fileBackup}...`);
+
+    if (await isFileExists(fileBackup)) {
+      console.info(`Overwriting existing backup file ${fileBackup}...`);
+    }
+
+    await mkdir(dirname(fileBackup), { recursive: true });
+
+    await writeFile(fileBackup, js);
+
+    console.info(`✔ File backed up, ${file} -> ${fileBackup}`);
   }
 
   console.log(`Writing ${file}...`);
