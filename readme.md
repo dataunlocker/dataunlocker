@@ -31,5 +31,8 @@ npx -y dataunlocker patch file.js --id 000000000000000000000000
 ```
 
 As a result, `file.js` will be replaced with its obfuscated version with DataUnlocker Defender baked in. A backup
-of the original `file.js` will be placed next to it, named `file.js.0000000.backup` by default. You can skip creating a backup file
-with `--no-backup` option, or set a name for it with `--backup filename.js` option.
+of the original `file.js` will be placed next to it, named `file.js.0000000.backup` by default.
+
+- You can skip creating a backup file with `--no-backup` option.
+- You can set a name for a backup file with `--backup filename.js` option.
+- You can specify which endpoint to use for the patched code with `--endpoint example.com/abcdef` option (specify the endpoint URI without the protocol).

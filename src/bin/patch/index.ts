@@ -12,6 +12,8 @@ interface Args {
   'no-backup'?: boolean;
 
   backup?: string;
+
+  endpoint?: string;
 }
 
 export default async function patch(args: Args) {
@@ -75,7 +77,11 @@ export default async function patch(args: Args) {
 
   console.log(`Patching ${file}, please wait...`);
 
-  const url = `https://api${env ? `.${env}` : ''}.dataunlocker.com/domains/${id}/defender/patch-js`;
+  if (args.endpoint) {
+    console.log(`↳ Using endpoint ${args.endpoint}`);
+  }
+
+  const url = `https://api${env ? `.${env}` : ''}.dataunlocker.com/domains/${id}/defender/patch-js${args.endpoint ? `?endpoint=${encodeURIComponent(args.endpoint)}` : ''}`;
 
   let result: Response;
   try {
