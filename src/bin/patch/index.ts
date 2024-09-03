@@ -30,7 +30,7 @@ export default async function patch(args: Args) {
 
   const js = await readFile(file);
   const id = args.id || getEnv('DATAUNLOCKER_ID');
-  const env = getEnv('DATAUNLOCKER_ENV').toLowerCase();
+  const env = getEnv('DATAUNLOCKER_ENV')?.toLowerCase() || '';
 
   if (!file.endsWith('.js')) {
     return warnAndExit(
