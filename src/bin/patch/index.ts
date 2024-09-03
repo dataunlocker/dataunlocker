@@ -1,8 +1,7 @@
-import { getEnv } from '@/utils';
+import { getEnv, getRelativeFileToCwd, isFileExists } from '@/utils';
 import { createHash } from 'crypto';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, resolve } from 'path';
-import { isFileExists } from '../../lib/utils/files.js';
 
 interface Args {
   /** Filename to patch; resolved from cwd. */
@@ -59,7 +58,7 @@ export default async function patch(args: Args) {
       ? ''
       : `${file}.${createHash('sha256').update(js).digest('hex').slice(0, 7)}.backup`;
 
-  console.log(`Patching ${file}, please wait...`);
+  console.log(`Patching ${getRelativeFileToCwd(file)}, please wait...`);
 
   if (args.endpoint) {
     console.log(`↳ Using endpoint ${args.endpoint}`);
@@ -97,20 +96,26 @@ export default async function patch(args: Args) {
   }
 
   if (fileBackup) {
-    console.info(`Backing up ${file} -> ${fileBackup}...`);
+    console.info(
+      `Backing up ${getRelativeFileToCwd(file)} -> ${getRelativeFileToCwd(fileBackup)}...`
+    );
 
     if (await isFileExists(fileBackup)) {
-      console.info(`Overwriting existing backup file ${fileBackup}...`);
+      console.info(
+        `Overwriting existing backup file ${getRelativeFileToCwd(fileBackup)}...`
+      );
     }
 
     await mkdir(dirname(fileBackup), { recursive: true });
 
     await writeFile(fileBackup, js);
 
-    console.info(`✔ File backed up, ${file} -> ${fileBackup}`);
+    console.info(
+      `✔ File backed up, ${getRelativeFileToCwd(file)} -> ${getRelativeFileToCwd(fileBackup)}`
+    );
   }
 
-  console.log(`Writing ${file}...`);
+  console.log(`Writing ${getRelativeFileToCwd(file)}...`);
 
   await writeFile(file, text);
 

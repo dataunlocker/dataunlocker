@@ -1,6 +1,6 @@
 {
   "name": "dataunlocker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "DataUnlocker's command line interface utilities",
   "type": "module",
   "main": "dist/lib/index.js",

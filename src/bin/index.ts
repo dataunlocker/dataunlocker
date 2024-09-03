@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { getEnv } from '@/utils';
 import { readFile } from 'fs/promises';
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -14,7 +15,17 @@ const pkg = JSON.parse(
   ).toString()
 );
 
-console.log(`🛡️ DataUnlocker CLI v${pkg.version}\n`);
+const props = [
+  ['ENV', getEnv('DATAUNLOCKER_ENV')],
+  ['ID', getEnv('DATAUNLOCKER_ID') || '<not set>'],
+]
+  .filter(([, v]) => typeof v !== 'undefined')
+  .map(([k, v]) => `${k}=${v}`)
+  .join(', ');
+
+console.info(
+  `💜 DataUnlocker CLI v${pkg.version}${props ? `\n🔧 ${props}` : ''}\n`
+);
 
 try {
   const f = await import(`./${argv[0]}/index.js`);
