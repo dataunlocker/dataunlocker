@@ -8,7 +8,7 @@ import { resolve } from 'path';
 describe('dataunlocker patch', () => {
   const dir = resolve(process.cwd(), 'local');
   const file = resolve(dir, 'test.js');
-  const backupFile = resolve('local/test.js.b80112c.backup');
+  const backupFile = resolve('local/test.js.backup');
   const backupFile2 = resolve('local/test-manual.js.backup');
   const fileContent = 'console.log("test");';
 

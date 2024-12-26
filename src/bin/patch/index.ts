@@ -1,5 +1,4 @@
 import { getEnv, getRelativeFileToCwd, isFileExists } from '@/utils';
-import { createHash } from 'crypto';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, resolve } from 'path';
 
@@ -28,19 +27,19 @@ export default async function patch(args: Args) {
     return warnAndExit(`File not found: ${file}`);
   }
 
-  const js = await readFile(file);
-  const id = args.id || getEnv('DATAUNLOCKER_ID');
-  const env = getEnv('DATAUNLOCKER_ENV')?.toLowerCase() || '';
-
   if (!file.endsWith('.js')) {
     return warnAndExit(
       `Only .js files are supported. Provided file not supported: ${file}`
     );
   }
 
+  const js = (await readFile(file)).toString();
+  const id = args.id || getEnv('DATAUNLOCKER_ID');
+  const env = getEnv('DATAUNLOCKER_ENV')?.toLowerCase() || '';
+
   if (!id || !/^[0-9a-f]{24}$/.test(id)) {
     return warnAndExit(
-      `Please specify a valid DataUnlocker ID as DATAUNLOCKER_ID env var or --id CLI param`
+      `Please specify a valid DataUnlocker ID as DATAUNLOCKER_ID env var or --id CLI param. Copy it from the DataUnlocker dashboard.`
     );
   }
 
@@ -56,13 +55,47 @@ export default async function patch(args: Args) {
     ? resolve(args.backup)
     : args['no-backup']
       ? ''
-      : `${file}.${createHash('sha256').update(js).digest('hex').slice(0, 7)}.backup`;
+      : `${file}.backup`;
+  const isBackupFileExists = fileBackup
+    ? await isFileExists(fileBackup)
+    : false;
+  let jsToPatch = js;
 
-  console.log(`Patching ${getRelativeFileToCwd(file)}, please wait...`);
+  console.log(
+    `Backup file: ${isBackupFileExists ? `exists (${getRelativeFileToCwd(fileBackup)})` : fileBackup ? 'does not exist' : 'disabled'}`
+  );
+
+  if (fileBackup && !isBackupFileExists) {
+    console.info(
+      ` ↳ Backing up ${getRelativeFileToCwd(file)} -> ${getRelativeFileToCwd(fileBackup)}...`
+    );
+
+    await mkdir(dirname(fileBackup), { recursive: true });
+
+    await writeFile(fileBackup, jsToPatch);
+
+    console.info(` ✔ Backed up to ${getRelativeFileToCwd(fileBackup)}`);
+  }
+
+  console.log(`Patching, please wait...`);
+  if (isBackupFileExists) {
+    jsToPatch = (await readFile(fileBackup)).toString();
+    console.log(
+      ` ↳ Using backup file contents (${getRelativeFileToCwd(fileBackup)})`
+    );
+  } else {
+    console.log(
+      ` ↳ Using original file contents (${getRelativeFileToCwd(file)})`
+    );
+  }
 
   if (args.endpoint) {
-    console.log(`↳ Using endpoint ${args.endpoint}`);
+    console.log(` ↳ Using endpoint ${args.endpoint}`);
+  } else {
+    console.log(` ↳ Using the latest healthy endpoint (automatic)`);
   }
+
+  console.log(` ↳ ${getRelativeFileToCwd(file)} will be overwritten`);
 
   const url = `https://api${env ? `.${env}` : ''}.dataunlocker.com/domains/${id}/defender/patch-js${args.endpoint ? `?endpoint=${encodeURIComponent(args.endpoint)}` : ''}`;
 
@@ -70,7 +103,7 @@ export default async function patch(args: Args) {
   try {
     result = await fetch(url, {
       method: 'POST',
-      body: js,
+      body: jsToPatch,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -95,31 +128,11 @@ export default async function patch(args: Args) {
     process.exit(1004);
   }
 
-  if (fileBackup) {
-    console.info(
-      `Backing up ${getRelativeFileToCwd(file)} -> ${getRelativeFileToCwd(fileBackup)}...`
-    );
-
-    if (await isFileExists(fileBackup)) {
-      console.info(
-        `Overwriting existing backup file ${getRelativeFileToCwd(fileBackup)}...`
-      );
-    }
-
-    await mkdir(dirname(fileBackup), { recursive: true });
-
-    await writeFile(fileBackup, js);
-
-    console.info(
-      `✔ File backed up, ${getRelativeFileToCwd(file)} -> ${getRelativeFileToCwd(fileBackup)}`
-    );
-  }
-
-  console.log(`Writing ${getRelativeFileToCwd(file)}...`);
+  console.log(` ↳ Writing ${getRelativeFileToCwd(file)}...`);
 
   await writeFile(file, text);
 
-  console.log(`✔ Done!`);
+  console.log(` ✔ Done!`);
 }
 
 const warnAndExit = (message: string) => {

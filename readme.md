@@ -8,11 +8,17 @@ Requires [NodeJS v16+](https://nodejs.org/) to be installed, which comes with `n
 
 ## Usage
 
-### Patch a core JavaScript file of your web application
+### `$ npx -y dataunlocker patch`
 
-[DataUnlocker Defender](https://docs.dataunlocker.com/setup/defender) tightly integrates with your web app's JavaScript code, specifically, your build artifacts or JavaScript libraries that your web app relies on.
+Patches a core JavaScript file of your web application.
 
-Locate such a file (`file.js`) and patch it using the following command, ideally in your deployment pipeline.
+[DataUnlocker Defender](https://docs.dataunlocker.com/setup/defender) tightly integrates with your web app's JavaScript code, specifically, your build artifacts or JavaScript libraries that your web app relies on. By design, each `dataunlocker patch` run should be embedded into your build pipeline to generate the newly obfuscated JavaScript file on every build run.
+
+Follow these steps to install DataUnlocker Defender in your web app:
+
+1. Get your DataUnlocker ID from [DataUnlocker Admin](https://admin-2.dataunlocker.com).
+2. Locate a core file (for example, `file.js`) which is loaded on all pages of your web application.
+3. Patch it using the following command, ideally in your deployment pipeline.
 
 ```sh
 npx -y dataunlocker patch file.js
@@ -30,9 +36,30 @@ or via the `--id` flag:
 npx -y dataunlocker patch file.js --id 000000000000000000000000
 ```
 
-As a result, `file.js` will be replaced with its obfuscated version with DataUnlocker Defender baked in. A backup
-of the original `file.js` will be placed next to it, named `file.js.0000000.backup` by default.
+As a result, `file.js` will be replaced with its obfuscated version with DataUnlocker Defender baked in. A backup of the original `file.js` will be placed next to it, named `file.js.backup` by default.
+
+Note:
 
 - You can skip creating a backup file with `--no-backup` option.
 - You can set a name for a backup file with `--backup filename.js` option.
 - You can specify which endpoint to use for the patched code with `--endpoint example.com/abcdef` option (specify the endpoint URI without the protocol).
+- If the backup file exists, its content will be used for patching.
+
+## Example
+
+`$ npx -y dataunlocker patch file.js --id 000000000000000000000000`
+
+```
+💜 DataUnlocker CLI v2.0.0
+🔧 ID=000000000000000000000000
+
+Backup file: does not exist
+ ↳ Backing up local/test.js -> local/test.js.backup...
+ ✔ Backed up to local/test.js.backup
+Patching, please wait...
+ ↳ Using original file contents (local/test.js)
+ ↳ Using the latest healthy endpoint (automatic)
+ ↳ local/test.js will be overwritten
+ ↳ Writing local/test.js...
+ ✔ Done!
+```
