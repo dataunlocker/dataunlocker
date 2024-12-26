@@ -50,16 +50,17 @@ Note:
 `$ npx -y dataunlocker patch file.js --id 000000000000000000000000`
 
 ```
-💜 DataUnlocker CLI v2.0.0
+💜 DataUnlocker CLI v2.0.1
 🔧 ID=000000000000000000000000
 
 Backup file: does not exist
  ↳ Backing up local/test.js -> local/test.js.backup...
  ✔ Backed up to local/test.js.backup
-Patching, please wait...
+Patching
  ↳ Using original file contents (local/test.js)
  ↳ Using the latest healthy endpoint (automatic)
  ↳ local/test.js will be overwritten
+ ↳ Patching, please wait...
  ↳ Writing local/test.js...
  ✔ Done!
 ```

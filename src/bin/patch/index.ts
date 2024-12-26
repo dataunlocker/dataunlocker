@@ -77,7 +77,7 @@ export default async function patch(args: Args) {
     console.info(` ✔ Backed up to ${getRelativeFileToCwd(fileBackup)}`);
   }
 
-  console.log(`Patching, please wait...`);
+  console.log(`Patching`);
   if (isBackupFileExists) {
     jsToPatch = (await readFile(fileBackup)).toString();
     console.log(
@@ -96,6 +96,7 @@ export default async function patch(args: Args) {
   }
 
   console.log(` ↳ ${getRelativeFileToCwd(file)} will be overwritten`);
+  console.log(` ↳ Patching, please wait...`);
 
   const url = `https://api${env ? `.${env}` : ''}.dataunlocker.com/domains/${id}/defender/patch-js${args.endpoint ? `?endpoint=${encodeURIComponent(args.endpoint)}` : ''}`;
 
