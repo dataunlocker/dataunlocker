@@ -54,8 +54,8 @@ Note:
 🔧 ID=000000000000000000000000
 
 Backup file: does not exist
- ↳ Backing up local/test.js -> local/test.js.backup...
- ✔ Backed up to local/test.js.backup
+ ↳ Backing up local/test.js -> local/test.js.c12fcf3.backup...
+ ✔ Backed up to local/test.js.c12fcf3.backup
 Patching
  ↳ Using original file contents (local/test.js)
  ↳ Using the latest healthy endpoint (automatic)

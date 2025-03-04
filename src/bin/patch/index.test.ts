@@ -1,14 +1,21 @@
 import { isFileExists } from '@/utils';
 import { assert, expect } from 'chai';
+import { createHash } from 'crypto';
 import { $, ExecaError } from 'execa';
 import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { beforeEach } from 'mocha';
 import { resolve } from 'path';
 
 describe('dataunlocker patch', () => {
+  const backupHash = createHash('sha256')
+    .update(process.env.DATAUNLOCKER_ID || '')
+    .update('test.js')
+    .digest('hex')
+    .slice(0, 7);
+
   const dir = resolve(process.cwd(), 'local');
   const file = resolve(dir, 'test.js');
-  const backupFile = resolve('local/test.js.backup');
+  const backupFile = resolve(`local/test.js.${backupHash}.backup`);
   const backupFile2 = resolve('local/test-manual.js.backup');
   const fileContent = 'console.log("test");';
 

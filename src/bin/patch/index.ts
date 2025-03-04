@@ -1,6 +1,7 @@
 import { getEnv, getRelativeFileToCwd, isFileExists } from '@/utils';
+import { createHash } from 'crypto';
 import { mkdir, readFile, writeFile } from 'fs/promises';
-import { dirname, resolve } from 'path';
+import { basename, dirname, resolve } from 'path';
 
 interface Args {
   /** Filename to patch; resolved from cwd. */
@@ -51,11 +52,17 @@ export default async function patch(args: Args) {
     return warnAndExit(`Conflicting options: --backup and --no-backup`);
   }
 
+  const hash = createHash('sha256')
+    .update(id)
+    .update(basename(file))
+    .digest('hex')
+    .slice(0, 7);
+
   const fileBackup = args.backup
     ? resolve(args.backup)
     : args['no-backup']
       ? ''
-      : `${file}.backup`;
+      : `${file}.${hash}.backup`;
   const isBackupFileExists = fileBackup
     ? await isFileExists(fileBackup)
     : false;
