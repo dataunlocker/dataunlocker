@@ -30,6 +30,14 @@ This command requires you to input your unique DataUnlocker domain ID, either by
 export DATAUNLOCKER_ID=000000000000000000000000
 ```
 
+or from `.dataunlocker.json` file:
+
+```json
+{
+  "DATAUNLOCKER_ID": "000000000000000000000000"
+}
+```
+
 or via the `--id` flag:
 
 ```sh

@@ -16,8 +16,8 @@ const pkg = JSON.parse(
 );
 
 const props = [
-  ['ENV', getEnv('DATAUNLOCKER_ENV')],
-  ['ID', getEnv('DATAUNLOCKER_ID') || '<not set>'],
+  ['ENV', await getEnv('DATAUNLOCKER_ENV')],
+  ['ID', (await getEnv('DATAUNLOCKER_ID')) || '<not set>'],
 ]
   .filter(([, v]) => typeof v !== 'undefined')
   .map(([k, v]) => `${k}=${v}`)

@@ -35,8 +35,8 @@ export default async function patch(args: Args) {
   }
 
   const js = (await readFile(file)).toString();
-  const id = args.id || getEnv('DATAUNLOCKER_ID');
-  const _env = getEnv('DATAUNLOCKER_ENV')?.toLowerCase() || '';
+  const id = args.id || (await getEnv('DATAUNLOCKER_ID'));
+  const _env = (await getEnv('DATAUNLOCKER_ENV'))?.toLowerCase() || '';
   const env = _env === 'prod' || _env === 'production' ? '' : _env;
 
   if (!id || !/^[0-9a-f]{24}$/.test(id)) {
