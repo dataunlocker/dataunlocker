@@ -1,6 +1,6 @@
 # DataUnlocker's CLI
 
-🛡️ [DataUnlocker](https://dataunlocker.com)'s command line interface utilities.
+🛡️ [DataUnlocker](https://dataunlocker.com)'s command line interface, helping you to protect your web application and web analytics from ad blockers.
 
 ## Requirements
 
